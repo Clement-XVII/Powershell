@@ -1,4 +1,4 @@
-
+function Wol {
   param
   (
     # one or more MACAddresses
@@ -63,3 +63,4 @@
     $UDPclient.Close()
     $UDPclient.Dispose()
   }
+}
