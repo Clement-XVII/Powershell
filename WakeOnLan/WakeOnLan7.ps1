@@ -1,4 +1,4 @@
-
+function Wol {
 param( [Parameter(Mandatory=$true, HelpMessage="MAC address of target machine to wake up")]
        [string] $MacAddress )
  
@@ -38,3 +38,4 @@ function Send-Packet([string]$MacAddress)
 ## Send magic packet to wake machine
 Write-host "Sending magic packet to $MacAddress"
 Send-Packet $MacAddress
+}
