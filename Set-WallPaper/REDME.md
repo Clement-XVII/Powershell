@@ -1,0 +1,1 @@
+Allows you to change the wallpaper
