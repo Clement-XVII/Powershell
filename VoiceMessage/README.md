@@ -1,0 +1,1 @@
+Allows to read a voice message with the VoiceMessage command ```VoiceMessage -Message "hello word```

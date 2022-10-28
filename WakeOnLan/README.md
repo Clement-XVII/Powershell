@@ -1,0 +1,1 @@
+For the script WakeOnlan7.ps1 you have to use powershell 7 while for WakeOnLan5.ps1 it works under powershell 5
