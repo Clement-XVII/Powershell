@@ -1,3 +1,4 @@
+
 function Wol {
 param( [Parameter(Mandatory=$true, HelpMessage="MAC address of target machine to wake up")]
        [string] $MacAddress )

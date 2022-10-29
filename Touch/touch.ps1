@@ -1,4 +1,4 @@
-function touch {
+Function touch {
     param (
         [string]$file
     )

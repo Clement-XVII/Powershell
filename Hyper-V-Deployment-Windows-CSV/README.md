@@ -1,0 +1,2 @@
+This script allows to deploy a number of virtual machines fixed with the csv file which must contain the name of the machines. With the script it will be necessary a file AutoUnattend.xml and a file install.wim.
+With the AutoUnattend.xml file, the username is "Utilisateur" and the password "Admin123".
