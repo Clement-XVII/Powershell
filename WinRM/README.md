@@ -1,0 +1,1 @@
+Start-Session -Username Utilisateur -CSV 'G:\My PS Script\WinRM\list.csv' -Name Clement
