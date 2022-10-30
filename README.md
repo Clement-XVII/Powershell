@@ -22,3 +22,8 @@ To start a single session
 Start-Session -Username John -CSV "Location of CSV file" -Name john
 ```
 
+Or open a session
+
+```
+Open-Onesession -Username John -CSV "Location of CSV file" -Name john
+```
