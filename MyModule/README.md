@@ -8,7 +8,7 @@ Send-Commands
 Send-Script
 Add-Music
 ```
-```
+```pwsh
 Add-Play-Music
 Play-Music
 Eject-ALLCD
