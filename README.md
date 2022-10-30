@@ -6,4 +6,4 @@ They can be installed with the command
 Copy-Item "Location-Of-Module\PSModule\*" -Destination 'C:\Program Files\WindowsPowerShell\Modules\PSModule' -Recurse -Force
 Import-Module PSModule -Verbose -Force
 ```
-## Powershell
+## Trolling coworkers
