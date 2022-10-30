@@ -316,7 +316,7 @@ Function Mute-Audio {
     [Audio]::Mute = $true
 }
 
-Function stanbly
+Function Sleep
 {
     C:/Windows/System32/rundll32.exe powrprof.dll,SetSuspendState Sleep
 }
