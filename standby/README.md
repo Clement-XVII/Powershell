@@ -1,1 +1,1 @@
-Allows to put the computer in standby mode
+Allows to put the computer in sleep mode
