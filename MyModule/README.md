@@ -1,3 +1,4 @@
+# Commands
 ```pwsh
 Start-Session
 Open-Session
