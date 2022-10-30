@@ -1124,3 +1124,23 @@ Function Send-HappyBirthday
         [System.Console]::Beep($Beep['Pitch'], $Beep['Length']);
     }
 }
+
+Function Play-song {
+Param(
+        [parameter(Mandatory=$true)]
+        [string]$URL
+    )
+
+    if(Test-Path "DownloadedWAVFile.mp3")
+    {
+        Remove-Item "DownloadedWAVFile.mp3" -Force
+    }
+    Invoke-WebRequest -Uri $URL -OutFile "DownloadedWAVFile.mp3"
+
+    $URL = 'https://www.myinstants.com/media/sounds/rickroll.mp3'
+    $filepath = ((Get-Childitem "DownloadedWAVFile.mp3").FullName)
+    Add-Type -AssemblyName presentationCore
+    $mediaPlayer = New-Object system.windows.media.mediaplayer
+    $mediaPlayer.open($filepath)
+    $mediaPlayer.Play()
+}
