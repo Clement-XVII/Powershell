@@ -1136,8 +1136,6 @@ Param(
         Remove-Item "DownloadedWAVFile.mp3" -Force
     }
     Invoke-WebRequest -Uri $URL -OutFile "DownloadedWAVFile.mp3"
-
-    $URL = 'https://www.myinstants.com/media/sounds/rickroll.mp3'
     $filepath = ((Get-Childitem "DownloadedWAVFile.mp3").FullName)
     Add-Type -AssemblyName presentationCore
     $mediaPlayer = New-Object system.windows.media.mediaplayer
