@@ -8,16 +8,18 @@ Import-Module PSModule -Verbose -Force
 ```
 ## Trolling coworkers
 
-Avant tout il faut connaitre le mot de passe et le nom d'utilisateur de leur ordinateur. Après cela il faut installer le module PSModule sur leur ordinateur (Il est possible de le faire avec un rubber ducky et clé USB qui récupère le fichier CSV) ensuite vous devait arranger votre fichier CSV de la façon suivante.
+First of all, you need to know the password and user name of your computer. After that you have to install the PSModule on their computer (it is possible to do this with a rubber ducky and USB stick that retrieves the CSV file) then you have to arrange your CSV file in the following way.
 ```
 Machines;Users
 192.168.1.21;john
 ```
-Vous devez utiliser le séparateur ";". Après cela vous devez importer MyModule. Puis il ne vous reste plus qu'a démarrer toute les Sessions du ficheir CSV avec la command 
+You must use the separator ";". After that you need to import MyModule. Then you just have to start all the Sessions in the CSV file with the command 
 ```
-Start-Session -Username John -CSV "Emplacement du fichier CSV"
+Start-Session -Username John -CSV "Location of CSV file
 ```
-Pour démarrer une seul Sesison
+To start a single session
 ```
-Start-Session -Username John -CSV "Emplacement du fichier CSV" -Name john
+Start-Session -Username John -CSV "Location of CSV file" -Name john
 ```
+
+Translated with www.DeepL.com/Translator (free version)
