@@ -22,4 +22,3 @@ To start a single session
 Start-Session -Username John -CSV "Location of CSV file" -Name john
 ```
 
-Translated with www.DeepL.com/Translator (free version)
