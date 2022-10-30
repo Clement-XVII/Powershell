@@ -10,7 +10,7 @@ Add-Music
 Add-Play-Music
 Play-Music
 Eject-ALLCD
-send-touch
+touch
 KillProcess
 Sleep-Mode
 search
