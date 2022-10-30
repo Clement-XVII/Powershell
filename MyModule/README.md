@@ -7,7 +7,7 @@ Send-Command
 Send-Commands
 Send-Script
 Add-Music
-Add-PlayMusic
+Add-Play-Music
 Play-Music
 Eject-ALLCD
 touch
