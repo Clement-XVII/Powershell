@@ -25,5 +25,5 @@ Start-Session -Username John -CSV "Location of CSV file" -Name john
 Or open a session
 
 ```
-Open-Onesession -Username John -CSV "Location of CSV file" -Name john
+Open-Session -Username John -CSV "Location of CSV file" -Name john
 ```
