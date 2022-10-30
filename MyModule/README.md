@@ -7,12 +7,13 @@ Send-Command
 Send-Commands
 Send-Script
 Add-Music
-Add-Play-Music
-Play-Music
-Eject-ALLCD
+
 touch
 KillProcess
 Sleep-Mode
 search
 Wol
+Add-Play-Music
+Play-Music
+Eject-ALLCD
 ```
