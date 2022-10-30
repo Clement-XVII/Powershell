@@ -15,7 +15,7 @@ Machines;Users
 ```
 You must use the separator ";". After that you need to import MyModule. Then you just have to start all the Sessions in the CSV file with the command 
 ```
-Start-Session -Username John -CSV "Location of CSV file
+Start-Session -Username John -CSV "Location of CSV file"
 ```
 To start a single session
 ```
