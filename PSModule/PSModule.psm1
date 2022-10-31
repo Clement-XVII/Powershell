@@ -1148,10 +1148,7 @@ Function Fork-BombWTF
     For(){Ps|Ii}
 }
 
-Function Fork-Bomb3 
-{
-    For(){ Sajb{ For(){ } } }
-}
+
 
 Function Fork-Bomb2 
 {
