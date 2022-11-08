@@ -14,3 +14,4 @@ STRING Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force;Ena
 DELAY 25
 ENTER
 REM (Get-WmiObject -Class Win32_NetworkAdapterConfiguration | where {$_.DefaultIPGateway -ne $null}).IPAddress | select-object -first 1
+REM Get-NetIPConfiguration | Sort InterfaceIndex | FT IPv4Address, IPv4DefaultGateway
