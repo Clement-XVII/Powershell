@@ -1143,4 +1143,12 @@ Param(
     $mediaPlayer.Play()
 }
 
+Function Disable-Network {
+$localIpAddress = (Get-WmiObject -Class Win32_NetworkAdapterConfiguration | where {$_.DefaultIPGateway -ne $null}).IPAddress | select-object -first 1;
+$iface = Get-NetIPAddress -AddressFamily IPv4 | Select-Object IPAddress, ifIndex;
+$iface | foreach{if($_.IPAddress -eq $localIpAddress){$test = $_.IfIndex;echo $_.IPAddress;Get-NetAdapter -ifIndex $test | Disable-NetAdapter -Confirm:$false}}
+}
 
+Function Enable-Network {
+    Get-NetAdapter -ifIndex $test | Enable-NetAdapter -Confirm:$false
+}
