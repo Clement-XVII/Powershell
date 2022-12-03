@@ -296,7 +296,7 @@ function Open-Apps
         [string]$Executable,
         [string]$WorkingDirectory,
         [string]$CSV,
-        [string]$Username,
+        [string]$UserID,
         [Parameter(Mandatory = $false)] 
         [string]$Name,
         [string]$Argument
@@ -335,10 +335,10 @@ function Open-Apps
     Start-Session -CSV $CSV
     $Session = Get-PSSession
     if ($PSBoundParameters.Keys.Contains("Argument")){
-        Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $Username
+        Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $UserID
         }
         else {
-            Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $Username
+            Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $UserID
         }
     }
     Write-Host "Remove all sessions..." -ForegroundColor Green
