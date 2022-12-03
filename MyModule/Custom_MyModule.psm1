@@ -1,5 +1,3 @@
-
-
 #It is possible to have two variables Password and username in order to avoid asking for the password and username every time
 $Username = "admin"
 $Password = "admin123"
