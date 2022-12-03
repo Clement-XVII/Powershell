@@ -15,6 +15,16 @@ To open all sessions :
 Start-Session -CSV "G:\list.csv" -Username orion
 ```
 ## Remove-Session
+To close a session use -Name :
+```pwsh
+Remove-Session -Name Orion
+```
+
+To close all sessions use -All :
+```pwsh
+Remove-Session -All
+```
+
 ## Send-Command
 ## Send-Commands
 ## Send-Script
