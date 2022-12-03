@@ -316,10 +316,10 @@ function Open-Apps
         if ($nam -match "$Name") {
             $Session = Get-PSSession -Name $nam
             if ($PSBoundParameters.Keys.Contains("Argument")){
-                Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $Username
+                Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $UserID
                 }
                 else {
-                    Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $Username
+                    Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $UserID
                 }
             }
         }
