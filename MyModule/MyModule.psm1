@@ -5,13 +5,26 @@ Function Start-Session()
         [string]$Username,
         [string]$CSV,
         [Parameter(Mandatory = $false)] 
+        [switch]$Enter,
         [string]$Name
     )
-    if ($PSBoundParameters.Keys.Contains("Name")){
+    if ($PSBoundParameters.Keys.Contains("Enter")){
         $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Users
         $Password = Read-Host "Enter Password" -AsSecureString
         $mdp = ConvertFrom-SecureString -SecureString $Password
-
+        foreach ($UnPC in $ListPCs) {
+            if ($UnPC -match "$Name") {
+                $NomPC = $UnPC.Machines
+                $login = "$NomPC\$Username"
+                $mycreds = New-Object System.Management.Automation.PSCredential($login, ($mdp | ConvertTo-SecureString))
+                $Session = Enter-PSSession -ComputerName $NomPC -Credential $mycreds
+            }
+        }
+    }
+    elseif ($PSBoundParameters.Keys.Contains("Name")){
+        $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Users
+        $Password = Read-Host "Enter Password" -AsSecureString
+        $mdp = ConvertFrom-SecureString -SecureString $Password
         foreach ($UnPC in $ListPCs) {
             if ($UnPC -match "$Name") {
                 $NomPC = $UnPC.Machines
@@ -32,29 +45,6 @@ Function Start-Session()
             $login = "$NomPC\$Username"
             $mycreds = New-Object System.Management.Automation.PSCredential($login, ($mdp | ConvertTo-SecureString))
             $Session = New-PSSession -ComputerName $NomPC -Name $NomUser -Credential $mycreds
-        }
-    }
-}
-
-Function Open-Session()
-{
-    Param(
-        [Parameter(Mandatory = $true)] 
-        [string]$Username,
-        [string]$CSV,
-        [string]$Name
-    )
-    
-    $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Users
-    $Password = Read-Host "Enter Password" -AsSecureString
-    $mdp = ConvertFrom-SecureString -SecureString $Password
-    foreach ($UnPC in $ListPCs) {
-        if ($UnPC -match "$Name") {
-            echo $UnPC
-            $NomPC = $UnPC.Machines
-            $login = "$NomPC\$Username"
-            $mycreds = New-Object System.Management.Automation.PSCredential($login, ($mdp | ConvertTo-SecureString))
-            $Session = Enter-PSSession -ComputerName $NomPC -Credential $mycreds
         }
     }
 }
@@ -166,103 +156,6 @@ Function Eject-ALLCD()
     }
 }
 
-Function touch {
-    param (
-        [string]$file
-    )
-
-    $dir = Split-Path $file
-
-    if (Test-Path $file) {
-        Get-Item $file
-    } elseif ($dir -and !(Test-Path -LiteralPath $dir)) {
-        $null = mkdir $dir
-        $null = New-Item $file -ItemType File
-    } else {
-        $null = New-Item $file -ItemType File
-    }
-}
-
-Function KillProcess {
-$listapps = Get-Process | Select-Object ProcessName
-echo $listapps | Format-Wide -Column 6
-$Application = Read-Host -Prompt "Entrer le nom de l'application"
-    if (-not($Application)) {
-        Write-Host "$Application `n" -ForegroundColor Green
-    }
-    elseif ($Application) {
-        Write-Host "Nom de l'application: $Application `n" -ForegroundColor Green
-    }
-  foreach($App in $listapps)
-  {
-     if($App -match $Application)
-        {
-        $name = $App
-        
-        }
-  }
-echo $name.ProcessName
-Stop-process -Name $name.ProcessName -Force   
-}
-
-Function Sleep-Mode
-{
-    C:/Windows/System32/rundll32.exe powrprof.dll,SetSuspendState Sleep
-}
-
-Function boucle {
-    foreach ($application in $Software) {
-
-            if ($application -match $Name) {
-                $DName = $Application.DisplayName
-                $Uninstall = $Application.UnInstallString
-                $NameOrganisation = $Application.Publisher
-                $Version = $Application.DisplayVersion
-                $Date = $Application.InstallDate
-                Write-Host -ForegroundColor Green "Application name: " -NoNewline
-                Write-Host -ForegroundColor White "$DName"
-                Write-Host -ForegroundColor Green "Version: " -NoNewline
-                Write-Host -ForegroundColor White "$Version"
-                Write-Host -ForegroundColor Green "Installation date: " -NoNewline
-                Write-Host -ForegroundColor White "$Date"
-                Write-Host -ForegroundColor Green "Uninstall string: " -NoNewline
-                Write-Host -ForegroundColor White "$Uninstall"
-                Write-Host -ForegroundColor Green "Organization name: " -NoNewline
-                Write-Host -ForegroundColor White "$NameOrganisation`n"
-                $i = $i + 1
-            }
-        }
-        if ($i -eq 0) {
-            Write-Host "$Name has not been found or is not installed !`n" -ForegroundColor Red
-        }
-}
-
-Function search {
-   
-    [CmdletBinding()]
-    Param([Parameter(Mandatory=$false)]
-    [string]$Name = '')
-    $Software = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*", "HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | select DisplayName, UninstallString, Publisher, DisplayVersion, InstallDate
-    $i = 0
-    
-    if ($PSBoundParameters.Keys.Contains("Name"))
-    {
-        boucle
-    }
-    else {
-        $Name = Read-Host -Prompt "Enter the application name"
-        if (-not($Name)) {
-            Write-Host "Please enter the application name " -ForegroundColor Red
-            Write-Host "All applications :`n " -ForegroundColor Green
-            sleep 1
-        }
-        elseif ($Name) {
-            Write-Host "The results for $Name are:`n" -ForegroundColor Green
-        }
-        boucle
-    }
-}
-
 Function Wol {
   param
   (
@@ -328,4 +221,126 @@ Function Wol {
     $UDPclient.Close()
     $UDPclient.Dispose()
   }
+}
+function Start-Process-Active
+{
+    
+    param
+    (
+        [Parameter(Mandatory = $true)] 
+        [string]$WorkingDirectory,
+        [string]$Executable,
+        [string]$UserID,
+        [Parameter(Mandatory = $false)] 
+        [System.Management.Automation.Runspaces.PSSession]$Session,
+        [string]$Argument
+        
+
+    )
+    if ($PSBoundParameters.Keys.Contains("Name")){
+        $names = (Get-PSSession).Name
+        foreach ($nam in $names) {
+            $Session = Get-PSSession -Name $nam
+        }
+    }
+    else {
+        $Session = Get-PSSession
+    }
+    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+    {
+        $Session.Availability
+        throw [System.Exception] "Session is not available"
+    }
+
+    Invoke-Command -Session $Session -ArgumentList $Executable,$Argument,$WorkingDirectory,$UserID -ScriptBlock {
+        param(
+        [Parameter(Mandatory = $false)]
+        $Executable,
+        $Argument,
+        $WorkingDirectory,
+        $UserID
+        )
+        if ($PSBoundParameters.Keys.Contains("-Argument")){
+        $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+        }
+        else {
+        $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
+        }
+        $principal = New-ScheduledTaskPrincipal -userid $UserID
+        $task = New-ScheduledTask -Action $action -Principal $principal
+        $taskname = "_StartProcessActiveTask"
+        try 
+        {
+            $registeredTask = Get-ScheduledTask $taskname -ErrorAction SilentlyContinue
+        } 
+        catch 
+        {
+            $registeredTask = $null
+        }
+        if ($registeredTask)
+        {
+            Unregister-ScheduledTask -InputObject $registeredTask -Confirm:$false
+        }
+        $registeredTask = Register-ScheduledTask $taskname -InputObject $task
+        Start-ScheduledTask -InputObject $registeredTask
+        Unregister-ScheduledTask -InputObject $registeredTask -Confirm:$false
+    }
+
+}
+
+function Open-Apps
+{
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [string]$Executable,
+        [string]$WorkingDirectory,
+        [string]$CSV,
+        [string]$Username,
+        [Parameter(Mandatory = $false)] 
+        [string]$Name,
+        [string]$Argument
+    )
+    
+    if ($PSBoundParameters.Keys.Contains("Name")){
+    $Session = (Get-PSSession).Name
+    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+    {
+        $Session.Availability
+        Write-Host "Session is not available" -ForegroundColor Red
+        Write-Host "Starting Session..." -ForegroundColor Green
+    }
+    Start-Session -Name $Name -CSV $CSV
+    $Session = (Get-PSSession).Name
+    foreach ($nam in $Session) {
+        if ($nam -match "$Name") {
+            $Session = Get-PSSession -Name $nam
+            if ($PSBoundParameters.Keys.Contains("Argument")){
+                Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $Username
+                }
+                else {
+                    Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $Username
+                }
+            }
+        }
+    }
+    else {
+    $Session = Get-PSSession
+    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+    {
+        $Session.Availability
+        Write-Host "Session is not available" -ForegroundColor Red
+        Write-Host "Starting Sessions..." -ForegroundColor Green
+    }
+    Start-Session -CSV $CSV
+    $Session = Get-PSSession
+    if ($PSBoundParameters.Keys.Contains("Argument")){
+        Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory -UserID $Username
+        }
+        else {
+            Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory -UserID $Username
+        }
+    }
+    Write-Host "Remove all sessions..." -ForegroundColor Green
+    Remove-Session -All
 }
