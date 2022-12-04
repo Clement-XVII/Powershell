@@ -342,3 +342,47 @@ function Open-Apps
     Write-Host "Remove all sessions..." -ForegroundColor Green
     Remove-Session -All
 }
+Function AddExec-Script
+{
+  param
+  (
+      [Parameter(Mandatory = $false)] 
+      [string]$Name,
+      [string]$script
+  )
+  $cheminascript = "$Env:TMP\Script\"
+
+  if ($PSBoundParameters.Keys.Contains("Name")){
+    $Session = (Get-PSSession).Name
+    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+    {
+       $Session.Availability
+       Write-Host "Session is not available" -ForegroundColor Red
+       Write-Host "Starting Session..." -ForegroundColor Green
+       Start-Session -Name $Name
+    }
+    $Session = (Get-PSSession).Name
+    foreach ($nam in $Session) {
+       if ($nam -match "$Name") {
+        
+             $Session = Get-PSSession -Name $nam
+             Invoke-Command -Session $Session -ScriptBlock {
+              if ((Test-Path $using:cheminascript) -eq $True) {
+                Write-Host "Present"
+              }
+              else{
+                Write-Host "Absent" ;
+                New-Item $using:cheminascript -ItemType Directory -Force|Out-null
+              }
+             }
+             $scriptfile = Get-Item $script
+             $nomfile = $scriptfile.Basename + $scriptfile.Extension
+             $ncs = $cheminascript + $nomfile 
+             Copy-Item -Path $script -Destination $cheminascript -ToSession $Session
+             
+             Start-Process-Active -WorkingDirectory "C:\" -Executable powershell.exe -Session $Session -Argument "-File $ncs"
+       }
+      }
+    }
+    Remove-Session -All
+  }
