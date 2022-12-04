@@ -1,6 +1,6 @@
 #It is possible to have two variables Password and username in order to avoid asking for the password and username every time
-$Username = "admin"
-$Password = "admin123"
+$Username = "orion"
+$Password = "Andoins64"
 $lettre = Get-WmiObject -Class Win32_logicaldisk | Where { $_.VolumeName -eq "Activation" } | ForEach-Object {$_.DeviceID}
 $CSV = "$lettre\orion.csv"
 
@@ -248,20 +248,7 @@ function Start-Process-Active
 
     )
     $UserID = $Username
-    if ($PSBoundParameters.Keys.Contains("Name")){
-        $names = (Get-PSSession).Name
-        foreach ($nam in $names) {
-            $Session = Get-PSSession -Name $nam
-        }
-    }
-    else {
-        $Session = Get-PSSession
-    }
-    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
-    {
-        $Session.Availability
-        throw [System.Exception] "Session is not available"
-    }
+
 
     Invoke-Command -Session $Session -ArgumentList $Executable,$Argument,$WorkingDirectory,$UserID -ScriptBlock {
         param(
@@ -271,11 +258,11 @@ function Start-Process-Active
         $WorkingDirectory,
         $UserID
         )
-        if ($PSBoundParameters.Keys.Contains("-Argument")){
-        $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+        if ($PSBoundParameters.Keys.Contains("Argument")){
+         $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
         }
         else {
-        $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
+         $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
         }
         $principal = New-ScheduledTaskPrincipal -userid $UserID
         $task = New-ScheduledTask -Action $action -Principal $principal
@@ -313,43 +300,44 @@ function Open-Apps
     )
     
     if ($PSBoundParameters.Keys.Contains("Name")){
-    $Session = (Get-PSSession).Name
-    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
-    {
-        $Session.Availability
-        Write-Host "Session is not available" -ForegroundColor Red
-        Write-Host "Starting Session..." -ForegroundColor Green
-    }
-    Start-Session -Name $Name
-    $Session = (Get-PSSession).Name
-    foreach ($nam in $Session) {
-        if ($nam -match "$Name") {
-            $Session = Get-PSSession -Name $nam
-            if ($PSBoundParameters.Keys.Contains("Argument")){
-                Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
-                }
-                else {
-                    Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory
-                }
-            }
-        }
+      $Session = (Get-PSSession).Name
+      if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+      {
+         $Session.Availability
+         Write-Host "Session is not available" -ForegroundColor Red
+         Write-Host "Starting Session..." -ForegroundColor Green
+         Start-Session -Name $Name
+      }
+      $Session = (Get-PSSession).Name
+      foreach ($nam in $Session) {
+         if ($nam -match "$Name") {
+               $Session = Get-PSSession -Name $nam
+               if ($PSBoundParameters.Keys.Contains("Argument")){
+                  Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+                  }
+                  else {
+                     Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory
+                  }
+               }
+         }
     }
     else {
-    $Session = Get-PSSession
-    if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
-    {
-        $Session.Availability
-        Write-Host "Session is not available" -ForegroundColor Red
-        Write-Host "Starting Sessions..." -ForegroundColor Green
-    }
-    Start-Session
-    $Session = Get-PSSession
-    if ($PSBoundParameters.Keys.Contains("Argument")){
-        Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
-        }
-        else {
-            Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory
-        }
+      $Session = Get-PSSession
+      if (($Session -eq $null) -or ($Session.Availability -ne [System.Management.Automation.Runspaces.RunspaceAvailability]::Available))
+      {
+         $Session.Availability
+         Write-Host "Session is not available" -ForegroundColor Red
+         Write-Host "Starting Sessions..." -ForegroundColor Green
+         Start-Session
+      }
+      
+      $Session = Get-PSSession
+      if ($PSBoundParameters.Keys.Contains("Argument")){
+         Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+         }
+         else {
+               Start-Process-Active -Session $Session -Executable $Executable -WorkingDirectory $WorkingDirectory
+         }
     }
     Write-Host "Remove all sessions..." -ForegroundColor Green
     Remove-Session -All
