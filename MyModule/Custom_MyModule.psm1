@@ -1,6 +1,6 @@
 #It is possible to have two variables Password and username in order to avoid asking for the password and username every time
-$Username = "orion"
-$Password = "Andoins64"
+$Username = "admin"
+$Password = "admin123"
 $lettre = Get-WmiObject -Class Win32_logicaldisk | Where { $_.VolumeName -eq "Activation" } | ForEach-Object {$_.DeviceID}
 $CSV = "$lettre\orion.csv"
 
