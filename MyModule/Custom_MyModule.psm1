@@ -2,7 +2,7 @@
 $Username = "admin"
 $Password = "admin123"
 $lettre = Get-WmiObject -Class Win32_logicaldisk | Where { $_.VolumeName -eq "Activation" } | ForEach-Object {$_.DeviceID}
-$CSV = "$lettre\orion.csv"
+$CSV = "$lettre\list.csv"
 
 Function Start-Session()
 {
