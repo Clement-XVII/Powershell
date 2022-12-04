@@ -1,6 +1,5 @@
 #It is possible to have two variables Password and username in order to avoid asking for the password and username every time
 
-
 Function Start-Session()
 {
     Param(
@@ -251,11 +250,11 @@ function Start-Process-Active
         $WorkingDirectory,
         $UserID
         )
-        if ($PSBoundParameters.Keys.Contains("Argument")){
-         $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+        if ([string]::IsNullOrEmpty($Argument)){
+         $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
         }
         else {
-         $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
+         $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
         }
         $principal = New-ScheduledTaskPrincipal -userid $UserID
         $task = New-ScheduledTask -Action $action -Principal $principal
