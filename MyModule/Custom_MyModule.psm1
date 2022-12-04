@@ -258,12 +258,12 @@ function Start-Process-Active
         $WorkingDirectory,
         $UserID
         )
-        if ($PSBoundParameters.Keys.Contains("Argument")){
-         $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
-        }
-        else {
-         $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
-        }
+        if ([string]::IsNullOrEmpty($Argument)){
+            $action = New-ScheduledTaskAction -Execute $Executable -WorkingDirectory $WorkingDirectory
+           }
+           else {
+            $action = New-ScheduledTaskAction -Execute $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
+           }
         $principal = New-ScheduledTaskPrincipal -userid $UserID
         $task = New-ScheduledTask -Action $action -Principal $principal
         $taskname = "_StartProcessActiveTask"
@@ -312,7 +312,7 @@ function Open-Apps
       foreach ($nam in $Session) {
          if ($nam -match "$Name") {
                $Session = Get-PSSession -Name $nam
-               if ($PSBoundParameters.Keys.Contains("Argument")){
+               if ($PSBoundParameters.Keys.Contains("-Argument")){
                   Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
                   }
                   else {
@@ -332,7 +332,7 @@ function Open-Apps
       }
       
       $Session = Get-PSSession
-      if ($PSBoundParameters.Keys.Contains("Argument")){
+      if ($PSBoundParameters.Keys.Contains("-Argument")){
          Start-Process-Active -Session $Session -Executable $Executable -Argument $Argument -WorkingDirectory $WorkingDirectory
          }
          else {
