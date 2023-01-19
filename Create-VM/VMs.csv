@@ -1,0 +1,2 @@
+Name,VHDPath,MemoryStartup,Index,Size,DiskLayout,SwitchName,Generation
+VM1,D:\VM,4GB,1,40GB,UEFI,local switch,2
