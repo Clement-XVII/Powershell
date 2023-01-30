@@ -472,8 +472,11 @@ function Execute-RemoteCommand {
     }
 }
 
-function Get-HelpMyModule {
+function Get-HelpModule {
 
+    Write-Host ""
+    Write-Host "----------MyModule----------"
+    Write-Host ""
     # Get all functions from the module
     $functions = Get-Command -Module "MyModule" | Where-Object { $_.CommandType -eq 'Function' }
 
@@ -484,6 +487,20 @@ function Get-HelpMyModule {
 
         # Write the function name and synopsis to the console
         Write-Host "Function: $($function.Name)"
-        Write-Host ""
     }
+    Write-Host ""
+    Write-Host "----------PSModule----------"
+    Write-Host ""
+
+    $functions = Get-Command -Module "PSModule" | Where-Object { $_.CommandType -eq 'Function' }
+
+    # Loop through each function
+    foreach ($function in $functions) {
+        # Get the help information for the function
+        $help = Get-Help $function.Name -Full
+
+        # Write the function name and synopsis to the console
+        Write-Host "Function: $($function.Name)"
+    }
+    Write-Host ""
 }
