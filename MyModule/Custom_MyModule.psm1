@@ -472,6 +472,7 @@ function Execute-RemoteCommand {
             Unregister-ScheduledTask -TaskName "Remote Execution" -Confirm:$false 
         }
     }
+    Remove-Session -All
 }
 
 function Get-HelpModule {
