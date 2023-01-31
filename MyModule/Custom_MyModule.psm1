@@ -367,12 +367,10 @@ Function AddExec-Script {
                 Copy-Item -Path $script -Destination $cheminascript -ToSession $Session
 
                 # Start the copied script in the remote session.
-                Start-Process-Active -WorkingDirectory "C:\" -Executable powershell.exe -Session $Session -Argument "-File $ncs"
+                Execute-RemoteCommand -Command "-WindowStyle hidden -File $ncs" -Name $Session 
             }
         }
     }
-    # Remove all remote sessions.
-    Remove-Session -All
 }
 
 
