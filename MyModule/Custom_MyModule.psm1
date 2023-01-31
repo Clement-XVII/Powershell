@@ -402,7 +402,9 @@ function Execute-RemoteCommand {
             Write-Host "Session is not available" -ForegroundColor Red
             Write-Host "Starting Session..." -ForegroundColor Green
             Start-Session -Name $Name
+            
         }
+        $sessions = Get-PSSession -Name ((Get-PSSession).Name)
     }
     else {
         # Get all available PSSession
