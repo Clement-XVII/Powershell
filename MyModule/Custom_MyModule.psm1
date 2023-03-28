@@ -61,12 +61,12 @@ Function Remove-Session() {
         [switch]$All
     )
     # Check if the Name parameter was passed
-    if ($PSBoundParameters.Keys.Contains("Name")) {
+    if ($Name)) {
         # If so, remove the session with the specified name
         Remove-PSSession -Name $Name
     }
     # Check if the All switch was passed
-    elseif ($PSBoundParameters.Keys.Contains("All")) {
+    elseif ($All) {
         # If so, get all the sessions and remove them
         $s = Get-PSSession
         Remove-PSSession -Session $s
