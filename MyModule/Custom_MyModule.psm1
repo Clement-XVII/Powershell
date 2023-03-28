@@ -11,72 +11,41 @@ Function Start-Session() {
 
     # Define the parameters for the function
     Param(
-        # The name of the remote computer
+        # The name(s) of the remote session(s)
         [Parameter(Mandatory = $false)] 
-        [string]$Name,
+        [string[]]$Name,
         # Switch parameter to specify if the session should be entered interactively
-        [switch]$Enter
+        [switch]$Enter,
+        [switch]$All
     )
 
-    # If the switch parameter Enter is specified
-    if ($PSBoundParameters.Keys.Contains("Enter")) {
-        # Read the CSV file and select the columns Machines and Users
-        $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Users
-        # Convert the password to a secure string
-        $mdp = ConvertTo-SecureString $Password -AsPlainText -Force
-        # Loop through each computer in the list
-        foreach ($UnPC in $ListPCs) {
-            # Check if the computer name matches the specified name
-            if ($UnPC -match "$Name") {
-                # Get the computer name
-                $NomPC = $UnPC.Machines
-                # Define the login credentials using the computer name and username
-                $login = "$NomPC\$Username"
-                # Create a new PSCredential object with the login credentials and password
-                $mycreds = New-Object System.Management.Automation.PSCredential($login, $mdp)
-                # Enter a PowerShell session on the remote computer using the credentials
-                $Session = Enter-PSSession -ComputerName $NomPC -Credential $mycreds
-            }
-        }
-    }
-    # If the parameter Name is specified
-    elseif ($PSBoundParameters.Keys.Contains("Name")) {
-        # Read the CSV file and select the columns Machines and Users
-        $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Users
-        # Convert the password to a secure string
-        $mdp = ConvertTo-SecureString $Password -AsPlainText -Force
-        # Loop through each computer in the list
-        foreach ($UnPC in $ListPCs) {
-            # Check if the computer name matches the specified name
-            if ($UnPC -match "$Name") {
-                # Get the computer name and user name
-                $NomPC = $UnPC.Machines
-                $NomUser = $UnPC.Users
-                # Define the login credentials using the computer name and username
-                $login = "$NomPC\$Username"
-                # Create a new PSCredential object with the login credentials and password
-                $mycreds = New-Object System.Management.Automation.PSCredential($login, $mdp)
-                # Create a new PowerShell session on the remote computer using the credentials and user name
-                $Session = New-PSSession -ComputerName $NomPC -Name $NomUser -Credential $mycreds
-            }
-        }
-    }
-    else {
-        # Read the CSV file and select the columns Machines 
-        $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines
-        # Convert the password to a secure string
-        $mdp = ConvertTo-SecureString $Password -AsPlainText -Force
-        # Loop through each computer in the list
-        foreach ($UnPC in $ListPCs) {
+    # Read the CSV file and select the columns Machines and Users
+    $ListPCs = Get-Content $CSV -Encoding UTF8 | ConvertFrom-Csv -Delimiter ";" | select Machines, Noms
+
+    # Convert the password to a secure string
+    $mdp = ConvertTo-SecureString $Password -AsPlainText -Force
+
+    # Loop through each computer in the list
+    foreach ($UnPC in $ListPCs) {
+        # Check if the computer name matches the specified name(s)
+        if (($All) -or ($Name -contains $UnPC.Noms)) {
             # Get the computer name and user name
             $NomPC = $UnPC.Machines
-            $NomUser = $UnPC.Users
+            $NomUser = $UnPC.Noms
             # Define the login credentials using the computer name and username
             $login = "$NomPC\$Username"
             # Create a new PSCredential object with the login credentials and password
             $mycreds = New-Object System.Management.Automation.PSCredential($login, $mdp)
-            # Create a new PowerShell session on the remote computer using the credentials and user name
-            $Session = New-PSSession -ComputerName $NomPC -Name $NomUser -Credential $mycreds
+            # If the switch parameter Enter is specified, enter the session interactively
+            if ($Enter) {
+                # Enter a PowerShell session on the remote computer using the credentials and user name
+                Enter-PSSession -ComputerName $NomPC -Credential $mycreds
+            }
+            # If the switch parameter Enter is not specified, create a new session
+            else {
+                # Create a new PowerShell session on the remote computer using the credentials and user name
+                New-PSSession -ComputerName $NomPC -Name $NomUser -Credential $mycreds
+            }
         }
     }
 }
