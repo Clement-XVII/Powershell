@@ -91,13 +91,11 @@ Function Send-Command() {
         [string]$Command
     )
     # Loop until the user stops the script
-    while ($true) {
-        # Get all the sessions
-        $Session = Get-PSSession
-        # Invoke the command on the specified session
-        Invoke-Command -Session $Session -ScriptBlock {
-            powershell.exe $Using:Command
-        }
+    # Get all the sessions
+    $Session = Get-PSSession
+    # Invoke the command on the specified session
+    Invoke-Command -Session $Session -ScriptBlock {
+        powershell.exe $Using:Command
     }
 }
 
