@@ -82,29 +82,21 @@ Function Remove-Session() {
     }
 }
 
-# Function to send a single command to a PowerShell session
-Function Send-Command() {
-    # Get all the sessions
-    $Session = Get-PSSession
-    # Prompt the user to enter the command to run
-    $command = Read-Host -Prompt "Enter command to run"
-    # Invoke the command on the specified session
-    Invoke-Command -Session $Session -ScriptBlock {
-        powershell.exe $Using:command
-    }
-}
 
 # Function to send multiple commands to a PowerShell session
-Function Send-Commands() {
+Function Send-Command() {
+    Param(
+        # The command to execute
+        [Parameter(Mandatory=$true)]
+        [string]$Command
+    )
     # Loop until the user stops the script
     while ($true) {
         # Get all the sessions
         $Session = Get-PSSession
-        # Prompt the user to enter the command to run
-        $command = Read-Host -Prompt "Enter command to run"
         # Invoke the command on the specified session
         Invoke-Command -Session $Session -ScriptBlock {
-            powershell.exe $Using:command
+            powershell.exe $Using:Command
         }
     }
 }
