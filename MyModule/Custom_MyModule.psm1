@@ -82,6 +82,33 @@ Function Remove-Session() {
     }
 }
 
+Function Send-CommandAndScript() {
+    [CmdletBinding()]
+    Param(
+        # The command to execute
+        [Parameter(Mandatory=$false, Position=0)]
+        [string]$Command,
+        
+        # The path of the script to execute
+        [Parameter(Mandatory=$false, Position=1)]
+        [string]$ScriptFilePath
+    )
+
+    # Get the PS session
+    $Session = Get-PSSession
+
+    # If a command was specified, execute it
+    if ($Command) {
+        Invoke-Command -Session $Session -ScriptBlock {
+            powershell.exe $Using:Command
+        }
+    }
+
+    # If a script file path was specified, execute it
+    if ($ScriptFilePath) {
+        Invoke-Command -FilePath $ScriptFilePath -Session $Session
+    }
+}
 
 # Function to send multiple commands to a PowerShell session
 Function Send-Command() {
