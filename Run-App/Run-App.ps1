@@ -1,11 +1,13 @@
-﻿function Run-App {
+function Run-App {
     param (
         [Parameter(Mandatory = $true)]
         [string]$AppName,
 
         [string]$From,
 
-        [switch]$List
+        [switch]$List,
+
+        [string]$Args  # 👈 Argument supplémentaire (URL, fichier, etc.)
     )
 
     $results = @()
@@ -105,7 +107,7 @@
         }
     }
 
-    # Nettoyage
+    # Nettoyage des doublons
     $results = $results | Sort-Object Path -Unique
 
     # Appliquer le filtre texte si présent (ex: store:classic)
@@ -136,7 +138,7 @@
         Write-Host "`n🚀 Lancement de : $($selected.Name)" -ForegroundColor Green
     }
     else {
-        # 🧠 Auto : priorité logique
+        # 🧠 Mode automatique
         $priority = @("Raccourci", "Registre", "Système", "Store")
         foreach ($type in $priority) {
             $match = $results | Where-Object { $_.Type -eq $type } | Select-Object -First 1
@@ -152,7 +154,11 @@
         if ($selected.Type -eq "Store") {
             Start-Process $selected.Path
         } else {
-            Start-Process -FilePath $selected.Path
+            if ($Args) {
+                Start-Process -FilePath $selected.Path -ArgumentList $Args
+            } else {
+                Start-Process -FilePath $selected.Path
+            }
         }
     } catch {
         Write-Host "❌ Erreur lors du lancement : $_" -ForegroundColor Red
