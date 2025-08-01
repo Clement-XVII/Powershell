@@ -97,15 +97,28 @@ function Run-App {
 
     # --- 4. Microsoft Store ---
     if (-not $sourceType -or $sourceType -eq "store") {
-        $storeApps = Get-StartApps | Where-Object { $_.Name -like "*$AppName*" }
+        $storeApps = Get-StartApps | Where-Object { $_.Name -like "*$AppName*" -or $_.AppID -like "*$AppName*" }
         foreach ($app in $storeApps) {
+            $packageFamilyName = $null
+            $appUserModelId = $null
+            $appId = $app.AppID
+
+            if ($appId -match '^Microsoft\.(.+?)(_[a-z0-9]{16})?!([^\\]+)$') {
+                $packageFamilyName = "$($matches[1])$($matches[2])"
+                $appUserModelId = "$packageFamilyName!$($matches[3])"
+            }
+
             $results += [PSCustomObject]@{
-                Type = "Store"
-                Name = $app.Name
-                Path = "shell:AppsFolder\$($app.AppID)"
+                Type              = "Store"
+                Name              = $app.Name
+                Path              = "shell:AppsFolder\$appId"
+                AppID             = $appId
+                PackageFamilyName = $packageFamilyName
+                AppUserModelId    = $appUserModelId
             }
         }
     }
+
 
     # Nettoyage des doublons
     $results = $results | Sort-Object Path -Unique
@@ -140,6 +153,20 @@ function Run-App {
     else {
         # 🧠 Mode automatique
         $priority = @("Raccourci", "Registre", "Système", "Store")
+        # 🎯 Filtrage intelligent : si l'utilisateur a précisé un nom plus spécifique (ex: classic, 2022)
+        $preferred = $results | Where-Object {
+            $_.Name -match "(?i)$AppName" -or
+            $_.Path -match "(?i)$AppName" -or
+            ($_.AppID -and $_.AppID -match "(?i)$AppName") -or
+            ($_.PackageFamilyName -and $_.PackageFamilyName -match "(?i)$AppName") -or
+            ($_.AppUserModelId -and $_.AppUserModelId -match "(?i)$AppName")
+        }
+
+        if ($preferred.Count -eq 1) {
+            $selected = $preferred[0]
+        } elseif ($preferred.Count -gt 1) {
+            $results = $preferred  # Ne garde que les plus proches pour le reste de la sélection
+        }
         foreach ($type in $priority) {
             $match = $results | Where-Object { $_.Type -eq $type } | Select-Object -First 1
             if ($match) {
