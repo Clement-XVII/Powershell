@@ -138,7 +138,7 @@ Write-Host "Configuration terminée avec succès. Seules les connexions par clé
 Restart-Service sshd
 
 
-$publicKeyPath = "\\vm-dc\sysvol\cclgsl\scripts\id_ed25519.pub"  # Chemin de la clé publique sur la clé USB
+$publicKeyPath = "Chemin_de_la_cle_publique"  # Chemin de la clé publique
 $adminAuthorizedKeysPath = "C:\ProgramData\ssh\administrators_authorized_keys"
 
 # Vérifier si la clé publique existe sur la clé USB
@@ -156,6 +156,7 @@ Write-Host "Configuration des permissions pour administrators_authorized_keys...
 icacls.exe "$adminAuthorizedKeysPath" /inheritance:r /grant "*S-1-5-32-544:F" /grant "SYSTEM:F"
 
 Write-Host "Configuration terminée avec succès. Seules les connexions par clé sont désormais autorisées." -ForegroundColor Green
+
 
 
 
