@@ -1,36 +1,10 @@
 
 
-\# 📦 Get‑OllamaInventory.ps1  
+# 📦 Get‑OllamaInventory.ps1  
 
 
 
-\*\*A PowerShell utility that scans a list of Ollama servers, builds a compact table + a detailed listing of every model installed on each host, and (optionally) exports the data to CSV.\*\*  
-
-
-
----  
-
-
-
-\## Table of Contents
-
-1\. \[What it does](#what-it-does)  
-
-2\. \[Prerequisites](#prerequisites)  
-
-3\. \[Installation / Download](#installation--download)  
-
-4\. \[Usage](#usage)  
-
-5\. \[Parameters](#parameters)  
-
-6\. \[Example output (table + detail)](#example-output-table--detail)  
-
-7\. \[CSV export \& file‑lock handling](#csv-export--file‑lock-handling)  
-
-8\. \[Contributing](#contributing)  
-
-9\. \[License](#license)  
+**A PowerShell utility that scans a list of Ollama servers, builds a compact table + a detailed listing of every model installed on each host, and (optionally) exports the data to CSV.**  
 
 
 
@@ -38,15 +12,25 @@
 
 
 
-\## What it does
+## Table of Contents
 
-\- \*\*Collects\*\* the list of models (`/api/tags`) from every Ollama server you provide.  
+1. [What it does](#what-it-does)  
 
-\- \*\*Displays\*\* a one‑line \*\*summary table\*\* (Server | OK? | #Models | Largest Model | Size (B) | Models).  
+2. [Prerequisites](#prerequisites)  
 
-\- \*\*Prints\*\* a \*\*human‑readable detailed view\*\* for each server (largest model highlighted, all models listed).  
+3. [Installation / Download](#installation--download)  
 
-\- \*\*Exports\*\* the data to a CSV file, with a built‑in mechanism that removes or waits for a locked file so the script never crashes because the CSV is open in Excel.  
+4. [Usage](#usage)  
+
+5. [Parameters](#parameters)  
+
+6. [Example output (table + detail)](#example-output-table--detail)  
+
+7. [CSV export & file‑lock handling](#csv-export--file‑lock-handling)  
+
+8. [Contributing](#contributing)  
+
+9. [License](#license)  
 
 
 
@@ -54,15 +38,31 @@
 
 
 
-\## Prerequisites
+## What it does
+
+- **Collects** the list of models (`/api/tags`) from every Ollama server you provide.  
+
+- **Displays** a one‑line **summary table** (Server | OK? | #Models | Largest Model | Size (B) | Models).  
+
+- **Prints** a **human‑readable detailed view** for each server (largest model highlighted, all models listed).  
+
+- **Exports** the data to a CSV file, with a built‑in mechanism that removes or waits for a locked file so the script never crashes because the CSV is open in Excel.  
+
+
+
+---  
+
+
+
+## Prerequisites
 
 | Requirement | Minimum version |
 
 |-------------|-----------------|
 
-| PowerShell | \*\*7.0\*\* (parallel processing) – works on Windows PowerShell 5.1 as well (without `-Parallel`). |
+| PowerShell | **7.0** (parallel processing) – works on Windows PowerShell 5.1 as well (without `-Parallel`). |
 
-| Network access | Ability to reach each Ollama server on port \*\*11434\*\* (default). |
+| Network access | Ability to reach each Ollama server on port **11434** (default). |
 
 | `Invoke‑RestMethod` | Built‑in, no extra modules required. |
 
@@ -72,13 +72,13 @@
 
 
 
-\## Installation / Download  
+## Installation / Download  
 
 
 
 ```powershell
 
-\# 1️⃣ Clone the repository (or just download the .ps1 file)
+# 1️⃣ Clone the repository (or just download the .ps1 file)
 
 git clone https://github.com/your‑username/ollama‑inventory.git
 
@@ -86,15 +86,15 @@ cd ollama‑inventory
 
 
 
-\# 2️⃣ (Optional) Unblock the script if you downloaded it from the web
+# 2️⃣ (Optional) Unblock the script if you downloaded it from the web
 
-Unblock-File -Path .\\Get-OllamaInventory.ps1
+Unblock-File -Path .Get-OllamaInventory.ps1
 
 ```
 
 
 
-> \*\*Tip\*\* – If you only need the script, you can download it directly:  
+> **Tip** – If you only need the script, you can download it directly:  
 
 > <https://raw.githubusercontent.com/your‑username/ollama‑inventory/main/Get-OllamaInventory.ps1>
 
@@ -104,17 +104,17 @@ Unblock-File -Path .\\Get-OllamaInventory.ps1
 
 
 
-\## Usage  
+## Usage  
 
 
 
 ```powershell
 
-.\\Get-OllamaInventory.ps1 `
+.Get-OllamaInventory.ps1 `
 
-&nbsp;   -IpListPath  'C:\\path\\to\\servers.txt' `
+&nbsp;   -IpListPath  'C:pathtoservers.txt' `
 
-&nbsp;   -OutputCsv   'C:\\path\\to\\Ollama\_Inventory.csv' `
+&nbsp;   -OutputCsv   'C:pathtoOllama_Inventory.csv' `
 
 &nbsp;   -ExpandAllModels   # (optional) one CSV row per model
 
@@ -122,29 +122,29 @@ Unblock-File -Path .\\Get-OllamaInventory.ps1
 
 
 
-\### Minimal call (just console output)
+### Minimal call (just console output)
 
 
 
 ```powershell
 
-.\\Get-OllamaInventory.ps1 -IpListPath .\\servers.txt
+.Get-OllamaInventory.ps1 -IpListPath .servers.txt
 
 ```
 
 
 
-\### Full call (table + detail + CSV)
+### Full call (table + detail + CSV)
 
 
 
 ```powershell
 
-.\\Get-OllamaInventory.ps1 `
+.Get-OllamaInventory.ps1 `
 
-&nbsp;   -IpListPath  '.\\servers.txt' `
+&nbsp;   -IpListPath  '.servers.txt' `
 
-&nbsp;   -OutputCsv   '.\\Ollama\_Inventory\_$(Get-Date -Format "yyyyMMdd\_HHmmss").csv'
+&nbsp;   -OutputCsv   '.Ollama_Inventory_$(Get-Date -Format "yyyyMMdd_HHmmss").csv'
 
 ```
 
@@ -154,7 +154,7 @@ Unblock-File -Path .\\Get-OllamaInventory.ps1
 
 
 
-\## Parameters  
+## Parameters  
 
 
 
@@ -162,15 +162,15 @@ Unblock-File -Path .\\Get-OllamaInventory.ps1
 
 |-----------|------|-------------|---------|
 
-| \*\*`-IpListPath`\*\* | `string` | Path to a plain‑text file that contains one server IP or hostname per line. Blank lines and lines starting with `#` are ignored. | `'C:\\servers.txt'` |
+| **`-IpListPath`** | `string` | Path to a plain‑text file that contains one server IP or hostname per line. Blank lines and lines starting with `#` are ignored. | `'C:servers.txt'` |
 
-| \*\*`-TimeoutSec`\*\* | `int` | Seconds to wait for each HTTP request before timing out. | `10` (default) |
+| **`-TimeoutSec`** | `int` | Seconds to wait for each HTTP request before timing out. | `10` (default) |
 
-| \*\*`-OutputCsv`\*\* | `string` | Full path of the CSV file to create. If omitted, no CSV is written. | `'C:\\OllamaReport.csv'` |
+| **`-OutputCsv`** | `string` | Full path of the CSV file to create. If omitted, no CSV is written. | `'C:OllamaReport.csv'` |
 
-| \*\*`-ExpandAllModels`\*\* | `\[switch]` | When set, the CSV contains \*\*one row per model\*\* (full detail). Without it, the CSV is \*\*one row per server\*\* (compact). | `-ExpandAllModels` |
+| **`-ExpandAllModels`** | `[switch]` | When set, the CSV contains **one row per model** (full detail). Without it, the CSV is **one row per server** (compact). | `-ExpandAllModels` |
 
-| \*\*`-ExpandAllModels`\*\* | `\[switch]` | Export a detailed CSV (one row per model) instead of the compact one‑row‑per‑server format. | `-ExpandAllModels` |
+| **`-ExpandAllModels`** | `[switch]` | Export a detailed CSV (one row per model) instead of the compact one‑row‑per‑server format. | `-ExpandAllModels` |
 
 
 
@@ -178,11 +178,11 @@ Unblock-File -Path .\\Get-OllamaInventory.ps1
 
 
 
-\## Example output (table + detail)  
+## Example output (table + detail)  
 
 
 
-\### 1️⃣ Summary table (exactly the format you asked for)
+### 1️⃣ Summary table (exactly the format you asked for)
 
 
 
@@ -206,7 +206,7 @@ Server         OK? #Models Largest Model                Size (B) Models
 
 
 
-\### 2️⃣ Detailed view (printed right after the table)
+### 2️⃣ Detailed view (printed right after the table)
 
 
 
@@ -238,7 +238,7 @@ Server: 86.148.18.162   OK? ✔   #Models: 14
 
 
 
-> The \*\*green check\*\* (`✔`) means the server answered, a \*\*red cross\*\* (`✖`) indicates a failure (timeout, connection refused, etc.).  
+> The **green check** (`✔`) means the server answered, a **red cross** (`✖`) indicates a failure (timeout, connection refused, etc.).  
 
 
 
@@ -246,31 +246,31 @@ Server: 86.148.18.162   OK? ✔   #Models: 14
 
 
 
-\## CSV export \& file‑lock handling  
+## CSV export & file‑lock handling  
 
 
 
-\### What happens if the CSV is already open?  
+### What happens if the CSV is already open?  
 
 
 
-The script tries to \*\*remove the existing file\*\* before writing. If the file is locked (e.g., opened in Excel) it:
+The script tries to **remove the existing file** before writing. If the file is locked (e.g., opened in Excel) it:
 
 
 
-1\. Shows a warning, waits \*\*5 seconds\*\*, then retries the delete.  
+1. Shows a warning, waits **5 seconds**, then retries the delete.  
 
-2\. If it still can’t delete the file, it aborts the export and prints an error message – the console output (table + detail) is \*\*still displayed\*\*.
+2. If it still can’t delete the file, it aborts the export and prints an error message – the console output (table + detail) is **still displayed**.
 
 
 
-\### Example of a successful CSV export  
+### Example of a successful CSV export  
 
 
 
 ```powershell
 
-.\\Get-OllamaInventory.ps1 -IpListPath .\\servers.txt -OutputCsv .\\Ollama\_Inventory.csv
+.Get-OllamaInventory.ps1 -IpListPath .servers.txt -OutputCsv .Ollama_Inventory.csv
 
 ```
 
@@ -278,13 +278,13 @@ The script tries to \*\*remove the existing file\*\* before writing. If the file
 
 ```text
 
-CSV exporté avec succès → C:\\path\\to\\Ollama\_Inventory.csv
+CSV exporté avec succès → C:pathtoOllama_Inventory.csv
 
 ```
 
 
 
-\### CSV format (compact)
+### CSV format (compact)
 
 
 
@@ -296,7 +296,7 @@ CSV exporté avec succès → C:\\path\\to\\Ollama\_Inventory.csv
 
 
 
-\### CSV format (expanded, one row per model)
+### CSV format (expanded, one row per model)
 
 
 
@@ -316,19 +316,20 @@ CSV exporté avec succès → C:\\path\\to\\Ollama\_Inventory.csv
 
 
 
-\### 🎉 Ready to go!  
+### 🎉 Ready to go!  
 
 
 
 ```powershell
 
-\# Quick start
+# Quick start
 
-.\\Get-OllamaInventory.ps1 -IpListPath .\\servers.txt -OutputCsv .\\Ollama\_Inventory\_$(Get-Date -Format 'yyyyMMdd\_HHmmss').csv
+.Get-OllamaInventory.ps1 -IpListPath .servers.txt -OutputCsv .Ollama_Inventory_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv
 
 ```
 
 
 
 Happy scanning! 🚀
+
 
