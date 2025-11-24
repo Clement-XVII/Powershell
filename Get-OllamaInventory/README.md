@@ -28,9 +28,6 @@
 
 7. [CSV export & file‑lock handling](#csv-export--file‑lock-handling)  
 
-8. [Contributing](#contributing)  
-
-9. [License](#license)  
 
 
 
@@ -331,5 +328,6 @@ CSV exporté avec succès → C:pathtoOllama_Inventory.csv
 
 
 Happy scanning! 🚀
+
 
 
